@@ -18,22 +18,27 @@ public class MyEGreedy extends EGreedy {
     @Override
     public Action getBestAction(Agent r, Maze m, QLearning q) {
         //TODO to select the best possible action currently known in State s.
+        double epsilon = 0.000001d;
         ArrayList<Action> actions = m.getValidActions(r);
         double[] actionValues = q.getActionValues(r.getState(m), actions);
 
-        Action bestAction = actions.get(0);
-        double maxValue = actionValues[0];
+        ArrayList<Action> bestActions = new ArrayList<>();
+        double maxValue = Double.MIN_VALUE;
 
         for (int i = 0; i < actionValues.length; i++)
         {
             if (actionValues[i] > maxValue)
             {
+                bestActions = new ArrayList<>();
                 maxValue = actionValues[i];
-                bestAction = actions.get(i);
+                bestActions.add(actions.get(i));
+            } else if (Math.abs(actionValues[i] - maxValue) < epsilon) {
+                bestActions.add(actions.get(i));
             }
         }
 
-        return bestAction;
+        Random rand = new Random();
+        return bestActions.get(rand.nextInt(bestActions.size()));
     }
 
     @Override
