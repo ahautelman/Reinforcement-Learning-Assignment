@@ -13,7 +13,7 @@ public class RunMe {
 
         //load the maze
         //TODO replace this with the location to your maze on your file system
-        Maze maze = new Maze(new File("C:\\data\\development\\github\\QLearning\\data\\toy_maze.txt"));
+        Maze maze = new Maze(new File("data/toy_maze.txt"));
 
         //Set the reward at the bottom right to 10
         maze.setR(maze.getState(9, 9), 10);
