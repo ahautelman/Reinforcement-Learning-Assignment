@@ -1,11 +1,9 @@
 package tudelft.mysolution;
 
-import tudelft.Agent;
-import tudelft.EGreedy;
-import tudelft.Maze;
-import tudelft.QLearning;
+import tudelft.*;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class RunMe {
 
@@ -28,11 +26,29 @@ public class RunMe {
         QLearning learn=new MyQLearning();
 
         boolean stop=false;
-
+        double gamma = 0.9;
+        double alfa = 0.5;
+        int epochs = 0;
+        int maxEpochs = 50;
         //keep learning until you decide to stop
-        while (!stop) {
+        while (epochs < maxEpochs) {
             //TODO implement the action selection and learning cycle
+            while(!(robot.x == 9 && robot.y == 9) && robot.nrOfActionsSinceReset < 30000) {
+                State currentState = robot.getState(maze);
+                Action nextAction = selection.getEGreedyAction(robot, maze, learn, gamma);
+                robot.doAction(nextAction, maze);
+                State futureState = robot.getState(maze);
+                double r = maze.getR(futureState);
+                learn.updateQ(currentState, nextAction, r, futureState, maze.getValidActions(robot), alfa, gamma);
+            }
+            robot.reset();
+            epochs++;
+            //while (location != end) {
+            //  getEgreedyAction
+            //  move to node
+            //  updateR of current node (gamma * bestActionValue)
 
+            //
             //TODO figure out a stopping criterion
         }
 

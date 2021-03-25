@@ -10,9 +10,9 @@ tudelft/mysolution/MyEGreedy.java
  tudelft.mysolution.MyEGreedy
 tudelft/Agent.java
  tudelft.Agent
-tudelft/mysolution/MyQLearning.java
- tudelft.mysolution.MyQLearning
 tudelft/Maze.java
  tudelft.Maze
+tudelft/mysolution/MyQLearning.java
+ tudelft.mysolution.MyQLearning
 tudelft/mysolution/RunMe.java
  tudelft.mysolution.RunMe
