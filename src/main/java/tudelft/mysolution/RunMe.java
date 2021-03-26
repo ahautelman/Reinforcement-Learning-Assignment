@@ -83,6 +83,7 @@ public class RunMe {
             averageOfTrials[i] /= num;
         }
 
+        DataToCSV.writeToFile(averageOfTrials, "easy maze");
         System.out.println(Arrays.toString(averageOfTrials));
 
     }
