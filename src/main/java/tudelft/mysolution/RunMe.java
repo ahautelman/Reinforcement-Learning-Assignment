@@ -24,27 +24,27 @@ public class RunMe {
         }
 
         while (epochs < maxEpochs) {
-        //load the maze
-        //TODO replace this with the location to your maze on your file system
-        Maze maze = new Maze(new File("data/easy_maze.txt"));
+            //load the maze
+            //TODO replace this with the location to your maze on your file system
+            Maze maze = new Maze(new File("data/toy_maze.txt"));
 
-        //Set the reward at the bottom right to 10
-        maze.setR(maze.getState(24, 14), 10);
+            //Set the reward at the bottom right to 10
+            maze.setR(maze.getState(9, 9), 10);
 
-        //create a robot at starting and reset location (0,0) (top left)
-        Agent robot=new Agent(0,0);
+            //Set the reward at the bottom right to 10
+            maze.setR(maze.getState(9, 0), 5);
 
-        //make a selection object (you need to implement the methods in this class)
-        EGreedy selection=new MyEGreedy();
+            //create a robot at starting and reset location (0,0) (top left)
+            Agent robot=new Agent(0,0);
 
-        //make a Qlearning object (you need to implement the methods in this class)
-        QLearning learn=new MyQLearning();
+            //make a selection object (you need to implement the methods in this class)
+            EGreedy selection=new MyEGreedy();
 
-        //keep learning until you decide to stop
+            //make a Qlearning object (you need to implement the methods in this class)
+            QLearning learn=new MyQLearning();
 
-            //TODO implement the action selection and learning cycle
-            while(steps < 150000) {
-                while (!(robot.x == 24 && robot.y == 14)) {
+            while(steps < 20000) {
+                while (!(robot.x == 9 && robot.y == 9) && !(robot.x == 9 && robot.y == 0)) {
                     State currentState = robot.getState(maze);
                     Action nextAction = selection.getEGreedyAction(robot, maze, learn, epsilon);
                     robot.doAction(nextAction, maze);
@@ -56,6 +56,7 @@ public class RunMe {
                 averages.get(epochs).add(trial);
                 steps += trial;
             }
+
             steps = 0;
             epochs++;
         }
