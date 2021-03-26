@@ -6,15 +6,15 @@ tudelft/EGreedy.java
  tudelft.EGreedy
 tudelft/Action.java
  tudelft.Action
-tudelft/Maze.java
- tudelft.Maze
+tudelft/mysolution/DataToCSV.java
+ tudelft.mysolution.DataToCSV
 tudelft/mysolution/MyEGreedy.java
  tudelft.mysolution.MyEGreedy
 tudelft/Agent.java
  tudelft.Agent
 tudelft/mysolution/MyQLearning.java
  tudelft.mysolution.MyQLearning
-tudelft/mysolution/DataToCSV.java
- tudelft.mysolution.DataToCSV
+tudelft/Maze.java
+ tudelft.Maze
 tudelft/mysolution/RunMe.java
  tudelft.mysolution.RunMe

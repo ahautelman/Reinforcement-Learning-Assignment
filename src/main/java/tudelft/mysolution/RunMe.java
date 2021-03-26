@@ -26,10 +26,10 @@ public class RunMe {
         while (epochs < maxEpochs) {
         //load the maze
         //TODO replace this with the location to your maze on your file system
-        Maze maze = new Maze(new File("data/toy_maze.txt"));
+        Maze maze = new Maze(new File("data/easy_maze.txt"));
 
         //Set the reward at the bottom right to 10
-        maze.setR(maze.getState(9, 9), 10);
+        maze.setR(maze.getState(24, 14), 10);
 
         //create a robot at starting and reset location (0,0) (top left)
         Agent robot=new Agent(0,0);
@@ -43,8 +43,8 @@ public class RunMe {
         //keep learning until you decide to stop
 
             //TODO implement the action selection and learning cycle
-            while(steps < 10000) {
-                while (!(robot.x == 9 && robot.y == 9)) {
+            while(steps < 150000) {
+                while (!(robot.x == 24 && robot.y == 14)) {
                     State currentState = robot.getState(maze);
                     Action nextAction = selection.getEGreedyAction(robot, maze, learn, epsilon);
                     robot.doAction(nextAction, maze);
@@ -61,20 +61,20 @@ public class RunMe {
         }
 
         int index = 0;
-        int maxTrials = Integer.MIN_VALUE;
+        int minTrials = Integer.MAX_VALUE;
         System.out.println("trial size:");
 
         for(int i = 0; i < 10; i++) {
             System.out.println(i + ": " + averages.get(i).size());
-            if(averages.get(i).size() > maxTrials) {
+            if(averages.get(i).size() < minTrials) {
                 index = i;
-                maxTrials = averages.get(i).size();
+                minTrials = averages.get(i).size();
             }
         }
 
-        int[] averageOfTrials = new int[maxTrials];
+        int[] averageOfTrials = new int[minTrials];
 
-        for(int i = 0; i < maxTrials; i++) {
+        for(int i = 0; i < minTrials; i++) {
             int num = 0;
             for(int j = 0; j < 10; j++) {
                 if(averages.get(j).size() > i) {
