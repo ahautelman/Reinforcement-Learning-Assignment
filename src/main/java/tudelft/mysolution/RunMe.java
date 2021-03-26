@@ -4,6 +4,7 @@ import tudelft.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RunMe {
 
@@ -27,30 +28,62 @@ public class RunMe {
 
         boolean stop=false;
         double gamma = 0.9;
-        double alfa = 0.5;
+        double alfa = 0.7;
+        double epsilon = 0.1;
         int epochs = 0;
-        int maxEpochs = 50;
+        int maxEpochs = 10;
+        int steps = 0;
+        ArrayList<ArrayList<Integer>> averages = new ArrayList<>(10);
+        for(int i = 0; i < 10; i++) {
+            averages.add(new ArrayList<Integer>());
+        }
+
         //keep learning until you decide to stop
         while (epochs < maxEpochs) {
             //TODO implement the action selection and learning cycle
-            while(!(robot.x == 9 && robot.y == 9) && robot.nrOfActionsSinceReset < 30000) {
-                State currentState = robot.getState(maze);
-                Action nextAction = selection.getEGreedyAction(robot, maze, learn, gamma);
-                robot.doAction(nextAction, maze);
-                State futureState = robot.getState(maze);
-                double r = maze.getR(futureState);
-                learn.updateQ(currentState, nextAction, r, futureState, maze.getValidActions(robot), alfa, gamma);
+            while(steps < 30000) {
+                while (!(robot.x == 9 && robot.y == 9)) {
+                    State currentState = robot.getState(maze);
+                    Action nextAction = selection.getEGreedyAction(robot, maze, learn, epsilon);
+                    robot.doAction(nextAction, maze);
+                    State futureState = robot.getState(maze);
+                    double r = maze.getR(futureState);
+                    learn.updateQ(currentState, nextAction, r, futureState, maze.getValidActions(robot), alfa, gamma);
+                }
+                int trial = robot.reset();
+                averages.get(epochs).add(trial);
+                steps += trial;
             }
-            robot.reset();
+            steps = 0;
             epochs++;
-            //while (location != end) {
-            //  getEgreedyAction
-            //  move to node
-            //  updateR of current node (gamma * bestActionValue)
-
-            //
-            //TODO figure out a stopping criterion
         }
+
+        int index = 0;
+        int maxTrials = Integer.MIN_VALUE;
+        System.out.println("trial size:");
+
+        for(int i = 0; i < 10; i++) {
+            System.out.println(i + ": " + averages.get(i).size());
+            if(averages.get(i).size() > maxTrials) {
+                index = i;
+                maxTrials = averages.get(i).size();
+            }
+        }
+
+        int[] averageOfTrials = new int[maxTrials];
+
+        for(int i = 0; i < maxTrials; i++) {
+            int num = 0;
+            for(int j = 0; j < 10; j++) {
+                if(averages.get(j).size() > i) {
+                    averageOfTrials[i] += averages.get(j).get(i);
+                    num++;
+                }
+            }
+            averageOfTrials[i] /= num;
+        }
+
+        System.out.println(Arrays.toString(averageOfTrials));
 
     }
 
