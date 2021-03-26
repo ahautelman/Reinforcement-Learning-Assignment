@@ -10,6 +10,20 @@ public class RunMe {
 
     public static void main(String[] args) {
 
+        boolean stop=false;
+        double gamma = 0.9;
+        double alfa = 0.7;
+        double epsilon = 0.1;
+        int epochs = 0;
+        int maxEpochs = 10;
+        int steps = 0;
+
+        ArrayList<ArrayList<Integer>> averages = new ArrayList<>(10);
+        for(int i = 0; i < 10; i++) {
+            averages.add(new ArrayList<Integer>());
+        }
+
+        while (epochs < maxEpochs) {
         //load the maze
         //TODO replace this with the location to your maze on your file system
         Maze maze = new Maze(new File("data/toy_maze.txt"));
@@ -26,22 +40,10 @@ public class RunMe {
         //make a Qlearning object (you need to implement the methods in this class)
         QLearning learn=new MyQLearning();
 
-        boolean stop=false;
-        double gamma = 0.9;
-        double alfa = 0.7;
-        double epsilon = 0.1;
-        int epochs = 0;
-        int maxEpochs = 10;
-        int steps = 0;
-        ArrayList<ArrayList<Integer>> averages = new ArrayList<>(10);
-        for(int i = 0; i < 10; i++) {
-            averages.add(new ArrayList<Integer>());
-        }
-
         //keep learning until you decide to stop
-        while (epochs < maxEpochs) {
+
             //TODO implement the action selection and learning cycle
-            while(steps < 30000) {
+            while(steps < 10000) {
                 while (!(robot.x == 9 && robot.y == 9)) {
                     State currentState = robot.getState(maze);
                     Action nextAction = selection.getEGreedyAction(robot, maze, learn, epsilon);
