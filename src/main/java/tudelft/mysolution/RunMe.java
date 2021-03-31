@@ -5,6 +5,7 @@ import tudelft.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class RunMe {
 
@@ -27,6 +28,8 @@ public class RunMe {
             double epsilon = 1;
             double bestReward = 0;
             int epochsSinceBest = 0;
+
+            List<Double> foundRewards = new ArrayList<>();
             //load the maze
             //TODO replace this with the location to your maze on your file system
             Maze maze = new Maze(new File("data/toy_maze.txt"));
@@ -63,6 +66,7 @@ public class RunMe {
                 } else {
                     epochsSinceBest++;
                 }
+                foundRewards.add(r);
                 epsilon = Math.max(epsilon - epsilonK * epochsSinceBest, 0.05);
 //                epsilon = Math.max(epsilon - epsilonK, 0.05);
 //                System.out.println("epsilon: " + epsilon);
@@ -73,6 +77,8 @@ public class RunMe {
                 steps += trial;
 
             }
+            Double[] array = new Double[foundRewards.size()];
+            DataToCSV.writeToFile(foundRewards.toArray(array), "found_rewards_toy_maze");
             System.out.println("LastReward:" + r);
             steps = 0;
             epochs++;
@@ -92,16 +98,16 @@ public class RunMe {
 
         int[] averageOfTrials = new int[minTrials];
 
-        for(int i = 0; i < minTrials; i++) {
-            int num = 0;
-            for(int j = 0; j < 10; j++) {
-                if(averages.get(j).size() > i) {
-                    averageOfTrials[i] += averages.get(j).get(i);
-                    num++;
-                }
-            }
-            averageOfTrials[i] /= num;
-        }
+//        for(int i = 0; i < minTrials; i++) {
+//            int num = 0;
+//            for(int j = 0; j < 10; j++) {
+//                if(averages.get(j).size() > i) {
+//                    averageOfTrials[i] += averages.get(j).get(i);
+//                    num++;
+//                }
+//            }
+//            averageOfTrials[i] /= num;
+//        }
 
         DataToCSV.writeToFile(averageOfTrials, "toy maze");
         System.out.println(Arrays.toString(averageOfTrials));
