@@ -13,10 +13,10 @@ public class RunMe {
         boolean stop=false;
         double gamma = 0.9;
         double alfa = 0.7;
-        double epsilon = 0.1;
         int epochs = 0;
         int maxEpochs = 10;
         int steps = 0;
+        double epsilonK = 0.001;
 
         ArrayList<ArrayList<Integer>> averages = new ArrayList<>(10);
         for(int i = 0; i < 10; i++) {
@@ -24,6 +24,9 @@ public class RunMe {
         }
 
         while (epochs < maxEpochs) {
+            double epsilon = 1;
+            double bestReward = 0;
+            int epochsSinceBest = 0;
             //load the maze
             //TODO replace this with the location to your maze on your file system
             Maze maze = new Maze(new File("data/toy_maze.txt"));
@@ -42,21 +45,35 @@ public class RunMe {
 
             //make a Qlearning object (you need to implement the methods in this class)
             QLearning learn=new MyQLearning();
-
+            double r = 0;
             while(steps < 20000) {
+
                 while (!(robot.x == 9 && robot.y == 9) && !(robot.x == 9 && robot.y == 0)) {
                     State currentState = robot.getState(maze);
                     Action nextAction = selection.getEGreedyAction(robot, maze, learn, epsilon);
                     robot.doAction(nextAction, maze);
                     State futureState = robot.getState(maze);
-                    double r = maze.getR(futureState);
+                    r = maze.getR(futureState);
                     learn.updateQ(currentState, nextAction, r, futureState, maze.getValidActions(robot), alfa, gamma);
                 }
+
+                if(r > bestReward) {
+                    bestReward = r;
+                    epochsSinceBest = 0;
+                } else {
+                    epochsSinceBest++;
+                }
+                epsilon = Math.max(epsilon - epsilonK * epochsSinceBest, 0.05);
+//                epsilon = Math.max(epsilon - epsilonK, 0.05);
+//                System.out.println("epsilon: " + epsilon);
+//                System.out.println("reward: " + r);
+
                 int trial = robot.reset();
                 averages.get(epochs).add(trial);
                 steps += trial;
-            }
 
+            }
+            System.out.println("LastReward:" + r);
             steps = 0;
             epochs++;
         }
@@ -86,7 +103,7 @@ public class RunMe {
             averageOfTrials[i] /= num;
         }
 
-        DataToCSV.writeToFile(averageOfTrials, "easy maze");
+        DataToCSV.writeToFile(averageOfTrials, "toy maze");
         System.out.println(Arrays.toString(averageOfTrials));
 
     }
