@@ -15,7 +15,7 @@ public class MyQLearning extends QLearning {
      * @param s_next next action taken
      * @param possibleActions possible action of state s_next
      * @param alfa learning rate
-     * @param gamma value contribution factor
+     * @param gamma discount factor
      */
     @Override
     public void updateQ(State s, Action a, double r, State s_next, ArrayList<Action> possibleActions, double alfa, double gamma) {
