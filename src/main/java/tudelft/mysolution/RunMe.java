@@ -10,11 +10,12 @@ public class RunMe {
 
     public static void main(String[] args) {
 
-        boolean stop=false;
         double gamma = 0.9;
         double alfa = 0.7;
         int epochs = 0;
+        // for comparing results of different robots
         int maxEpochs = 10;
+        // steps takes so far
         int steps = 0;
         double epsilonK = 0.001;
 
@@ -27,14 +28,14 @@ public class RunMe {
             double epsilon = 1;
             double bestReward = 0;
             int epochsSinceBest = 0;
+
             //load the maze
-            //TODO replace this with the location to your maze on your file system
             Maze maze = new Maze(new File("data/toy_maze.txt"));
 
             //Set the reward at the bottom right to 10
             maze.setR(maze.getState(9, 9), 10);
 
-            //Set the reward at the bottom right to 10
+            //Set the reward at the top left to 5
             maze.setR(maze.getState(9, 0), 5);
 
             //create a robot at starting and reset location (0,0) (top left)
@@ -45,7 +46,10 @@ public class RunMe {
 
             //make a Qlearning object (you need to implement the methods in this class)
             QLearning learn=new MyQLearning();
+
+            // reward
             double r = 0;
+
             while(steps < 20000) {
 
                 while (!(robot.x == 9 && robot.y == 9) && !(robot.x == 9 && robot.y == 0)) {
@@ -64,9 +68,6 @@ public class RunMe {
                     epochsSinceBest++;
                 }
                 epsilon = Math.max(epsilon - epsilonK * epochsSinceBest, 0.05);
-//                epsilon = Math.max(epsilon - epsilonK, 0.05);
-//                System.out.println("epsilon: " + epsilon);
-//                System.out.println("reward: " + r);
 
                 int trial = robot.reset();
                 averages.get(epochs).add(trial);
@@ -80,7 +81,6 @@ public class RunMe {
 
         int index = 0;
         int minTrials = Integer.MAX_VALUE;
-        System.out.println("trial size:");
 
         for(int i = 0; i < 10; i++) {
             System.out.println(i + ": " + averages.get(i).size());

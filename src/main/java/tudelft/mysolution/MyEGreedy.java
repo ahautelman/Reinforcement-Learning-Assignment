@@ -7,17 +7,26 @@ import java.util.Random;
 
 public class MyEGreedy extends EGreedy {
 
+    /**
+     * @param r Robot
+     * @param m Maze that the robot is traversing
+     * @return returns a random action that a robot can take
+     */
     @Override
     public Action getRandomAction(Agent r, Maze m) {
-        //TODO to select an action at random in State s
         ArrayList<Action> actions = m.getValidActions(r);
         Random rand = new Random();
         return actions.get(rand.nextInt(actions.size()));
     }
 
+    /**
+     * @param r Robot
+     * @param m Maze that the robot is traversing
+     * @param q QLearning object that contains information about action values based on some state
+     * @return returns the action that has the biggest value for the current state of robot (Agent)
+     */
     @Override
     public Action getBestAction(Agent r, Maze m, QLearning q) {
-        //TODO to select the best possible action currently known in State s.
         double epsilon = 0.000001d;
         ArrayList<Action> actions = m.getValidActions(r);
         double[] actionValues = q.getActionValues(r.getState(m), actions);
@@ -41,9 +50,15 @@ public class MyEGreedy extends EGreedy {
         return bestActions.get(rand.nextInt(bestActions.size()));
     }
 
+    /**
+     * @param r Robot
+     * @param m Maze that the robot is traversing
+     * @param q QLearning object that contains information about action values based on some state
+     * @param epsilon probability of picking a random action instead of the greedy one
+     * @return greedy (best) action with probablity 1 - epsilon, random action otherwise
+     */
     @Override
     public Action getEGreedyAction(Agent r, Maze m, QLearning q, double epsilon) {
-        //TODO to select between random or best action selection based on epsilon.
         double prob = Math.random();
 
         if (prob <= epsilon) {
